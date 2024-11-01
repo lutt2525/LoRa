@@ -1,0 +1,40 @@
+#include <wire.h>
+#include <SPI.h>
+#include <LoRa.h>
+
+#define sS 10
+#define rst 9
+#define dio0 2
+
+String LoRaMessage = "";
+int counter = 0;
+
+void setup ()
+{
+  Serial. begin (115200) ;
+while (!Serial);
+Serial.println ("LoRa Sender");
+LoRa.Setpins (ss, rst, dio0);
+  if (!LoRa.begin(433E6)) {
+  Serial.println("Starting LoRa failed!");
+  delay(100);
+  while (1);
+
+  }
+}  
+
+void loop()
+{
+  LoRaMessage = "Pesan" ;
+  Serial.print("Mengirim Pesan ||");
+  Serial.println(counter);
+
+  // send packet
+  LoRa.beginPacket();
+  LoRa.print(LoRaMessage);
+  LoRa.endPacket();
+
+  counter++;
+
+  delay(1500);
+}
